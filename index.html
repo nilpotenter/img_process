@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片亮度调节工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>图片批量调节工具</h1>
+            <p>批量调节亮度和尺寸，为暗色背景优化您的截图</p>
+        </header>
+
+        <main>
+            <!-- 图片上传区域 -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7,10 12,15 17,10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <h3>拖拽图片到此处或点击批量选择</h3>
+                        <p>支持 PNG、JPG、JPEG、GIF、WebP 格式，单个文件最大 20MB，最多 50 张</p>
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    </div>
+                </div>
+
+                <!-- 上传进度 -->
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">正在上传...</span>
+                </div>
+            </section>
+
+            <!-- 图片列表和编辑区域 -->
+            <section class="editor-section" id="editorSection" style="display: none;">
+                <!-- 模式切换 -->
+                <div class="mode-switch">
+                    <div class="switch-container">
+                        <span class="mode-label">分别调节</span>
+                        <label class="switch">
+                            <input type="checkbox" id="batchModeToggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="mode-label">批量调节</span>
+                    </div>
+                </div>
+
+                <div class="editor-layout">
+                    <!-- 图片列表 -->
+                    <div class="image-list-container">
+                        <div class="list-header">
+                            <h3>图片列表 (<span id="imageCount">0</span>)</h3>
+                            <button id="clearAllBtn" class="btn btn-outline btn-small">清空全部</button>
+                        </div>
+                        <div class="image-list" id="imageList">
+                            <!-- 图片项将动态添加到这里 -->
+                        </div>
+                    </div>
+
+                    <!-- 预览和控制区域 -->
+                    <div class="preview-controls">
+                        <!-- 预览区域 -->
+                        <div class="preview-container">
+                            <canvas id="imageCanvas"></canvas>
+                            <div class="preview-info" id="previewInfo">
+                                选择图片进行预览
+                            </div>
+                        </div>
+
+                        <!-- 控制面板 -->
+                        <div class="controls">
+                            <!-- 当前选择显示 -->
+                            <div class="current-selection" id="currentSelection">
+                                <span id="currentImageName">未选择图片</span>
+                            </div>
+
+                            <!-- 亮度调节 -->
+                            <div class="control-group">
+                                <label for="brightnessSlider">亮度调节</label>
+                                <div class="slider-container">
+                                    <input type="range" id="brightnessSlider" min="0" max="200" value="100" step="1">
+                                    <input type="number" id="brightnessInput" min="0" max="200" value="100" step="1">
+                                    <span class="unit">%</span>
+                                </div>
+                            </div>
+
+                            <!-- 尺寸调节 -->
+                            <div class="control-group">
+                                <label>尺寸调节</label>
+                                <div class="size-controls">
+                                    <div class="size-inputs">
+                                        <div class="input-group">
+                                            <label for="widthInput">宽度</label>
+                                            <input type="number" id="widthInput" min="1" max="4000" step="1">
+                                            <span class="unit">px</span>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="heightInput">高度</label>
+                                            <input type="number" id="heightInput" min="1" max="4000" step="1">
+                                            <span class="unit">px</span>
+                                        </div>
+                                    </div>
+                                    <div class="size-options">
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" id="keepAspectRatio" checked>
+                                            <span class="checkmark"></span>
+                                            保持宽高比
+                                        </label>
+                                    </div>
+                                    <div class="size-presets">
+                                        <button class="preset-btn" data-size="28">28px</button>
+                                        <button class="preset-btn" data-size="64">64px</button>
+                                        <button class="preset-btn" data-size="128">128px</button>
+                                        <button class="preset-btn" data-size="256">256px</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 操作按钮 -->
+                            <div class="action-buttons">
+                                <button id="resetBtn" class="btn btn-secondary">重置当前</button>
+                                <button id="resetAllBtn" class="btn btn-secondary">重置全部</button>
+                                <button id="downloadCurrentBtn" class="btn btn-primary">下载当前</button>
+                                <button id="downloadAllBtn" class="btn btn-primary">批量下载</button>
+                                <button id="addMoreBtn" class="btn btn-outline">添加更多</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>本地运行，无需联网，保护您的隐私</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
